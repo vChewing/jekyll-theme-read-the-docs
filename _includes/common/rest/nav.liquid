@@ -1,4 +1,6 @@
-{%- include common/rest/workdir.liquid workdir=page.dir -%}
+{%- assign nav_page = site_pages | where: "url", page.url | first -%}
+{%- assign page_srcdir = nav_page.path | remove: nav_page.name | prepend: '/' -%}
+{%- include common/rest/workdir.liquid workdir=page_srcdir -%}
 
 {% comment %} prev and next {% endcomment %}
 {%- assign index = 0 -%}

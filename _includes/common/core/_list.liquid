@@ -1,7 +1,9 @@
 {%- include common/rest/site_pages.liquid -%}
 {%- include common/rest/workdir.liquid -%}
 
-{%- assign base = page.dir | append: "temp/" | split: "/" | size -%}
+{%- assign list_page = site_pages | where: "url", page.url | first -%}
+{%- assign page_srcdir = list_page.path | remove: list_page.name | prepend: '/' -%}
+{%- assign base = page_srcdir | append: "temp/" | split: "/" | size -%}
 {%- assign size = workdir_level | minus: base -%}
 {%- assign size_p1 = size | plus: 1 -%}
 

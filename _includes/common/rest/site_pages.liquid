@@ -6,3 +6,7 @@
 
 {%- assign site_dirs  = site_pages | where_exp: "item", "item.dir == item.url" -%}
 {%- assign site_files = site_pages | where_exp: "item", "item.dir != item.url" -%}
+
+{% comment %} 依原始 markdown 路徑（而非 page.dir）分組：page.dir 會跟隨 permalink，
+     會讓搬過位置、靠 permalink 保留舊網址的頁面歸錯目錄。 {% endcomment %}
+{%- assign site_file_groups = site_files | group_by_exp: "item", "item.path | remove: item.name | prepend: '/'" -%}

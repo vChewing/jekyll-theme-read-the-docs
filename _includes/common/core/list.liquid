@@ -1,5 +1,7 @@
 {%- include common/rest/site_pages.liquid -%}
-{%- include common/rest/workdir.liquid workdir=page.dir -%}
+{%- assign list_page = site_pages | where: "url", page.url | first -%}
+{%- assign page_srcdir = list_page.path | remove: list_page.name | prepend: '/' -%}
+{%- include common/rest/workdir.liquid workdir=page_srcdir -%}
 
 {%- for item in workdir_files %}
   - [{{ item.title | default: item.name }}]({{ item.url | relative_url }})
