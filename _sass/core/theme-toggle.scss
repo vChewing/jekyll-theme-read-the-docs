@@ -1,0 +1,26 @@
+// Theme toggle (auto / light / dark), see assets/js/theme.js
+.theme-toggle {
+  color: $theme-white;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: $border-radius;
+  opacity: 0.75;
+
+  &:hover,
+  &:focus {
+    background: $theme-mask-white;
+    opacity: 1;
+  }
+}
+
+.sidebar .header {
+  position: relative;
+
+  .theme-toggle {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+  }
+}

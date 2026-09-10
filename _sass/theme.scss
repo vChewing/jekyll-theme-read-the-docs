@@ -29,6 +29,7 @@
 @import "core/content";
 @import "core/header";
 @import "core/title";
+@import "core/theme-toggle";
 @import "core/markdown";
 @import "core/toasts";
 
@@ -37,3 +38,6 @@
 
 // utilities
 @import "lib/@primer/css/utilities";
+
+// dark mode (must come last)
+@import "dark";

@@ -179,6 +179,70 @@ function restore() {
   });
 }
 
+function theme() {
+  const modes = ["auto", "light", "dark"];
+  const icons = {
+    auto: "fa-adjust",
+    light: "fa-sun-o",
+    dark: "fa-moon-o",
+  };
+  const media = window.matchMedia("(prefers-color-scheme: dark)");
+
+  function saved() {
+    // localStorage wins; otherwise an author-provided data-theme attribute
+    // (e.g. a hard-coded default in a custom layout); otherwise auto.
+    const mode =
+      get("theme") || document.documentElement.getAttribute("data-theme");
+    return !mode || modes.indexOf(mode) === -1 ? "auto" : mode;
+  }
+
+  function system() {
+    return media.matches ? "dark" : "light";
+  }
+
+  function paint() {
+    const mode = saved();
+    const root = document.documentElement;
+
+    if (mode === "auto") {
+      root.removeAttribute("data-theme");
+    } else {
+      root.setAttribute("data-theme", mode);
+    }
+
+    const scheme = mode === "auto" ? system() : mode;
+    if (window.ui && ui.theme) {
+      $('meta[name="theme-color"]').attr(
+        "content",
+        scheme === "dark" ? ui.theme.dark : ui.theme.light,
+      );
+    }
+
+    const label = (window.ui && ui.i18n && ui.i18n[`theme_${mode}`]) || mode;
+    $(".theme-toggle")
+      .attr("title", label)
+      .attr("aria-label", label)
+      .find("i")
+      .attr("class", `fa ${icons[mode]}`);
+  }
+
+  $(".theme-toggle").on("click", function () {
+    // auto -> the opposite of the system scheme -> the system scheme -> auto
+    const order = ["auto", system() === "dark" ? "light" : "dark", system()];
+    const index = order.indexOf(saved());
+    set("theme", order[(index + 1) % order.length]);
+    paint();
+  });
+
+  if (media.addEventListener) {
+    media.addEventListener("change", paint);
+  } else if (media.addListener) {
+    media.addListener(paint);
+  }
+
+  paint();
+}
+
 function highlight() {
   const _sanitizeUrl = DOMPurify.sanitize(location.href);
   let text = new URL(_sanitizeUrl).searchParams.get("highlight");
@@ -258,6 +322,7 @@ initialize(location.pathname);
 initialize(location.hash);
 restore();
 highlight();
+theme();
 
 /* nested ul */
 $(".toc ul")

@@ -1,10 +1,10 @@
 .header {
   color: $theme-white;
-  background: $theme-blue;
+  background: $theme-carmine;
 
   input {
     border-radius: 50px;
-    border: 1px solid #2472a4;
+    border: 1px solid darken($theme-carmine, 5%);
     font-size: 80%;
   }
 }

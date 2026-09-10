@@ -1,13 +1,66 @@
 // fonts
 $body-font: BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
 $head-font: "Helvetica Neue", sans-serif;
-$mono-font: "Iosevka", "Iosevka Term", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+$mono-font: "Iosevka", "Iosevka Term", "SFMono-Regular", Consolas,
+  "Liberation Mono", Menlo, monospace;
 
 // theme color
-$theme-blue: #2980b9;
+// The accent hue is carmine (H≈343°): the original cyan-blue palette (#2980b9
+// and friends) was re-hued, keeping each colour's saturation/lightness
+// relationships unchanged. $theme-carmine plays the role of the former
+// $theme-blue.
+$theme-carmine: #b92952;
 $theme-red: #e74c3c;
 $theme-green: #1abc9c;
 $theme-orange: #e67e22;
+
+// @primer/css blue ramp, re-hued to the carmine family (H≈343°), so that
+// links, focus rings and the .color-blue-* utilities follow the theme too.
+// Redefined here — after "lib/@primer/css/support" (which declares them with
+// !default) and before the components are imported.
+$blue-000: #fff1f5;
+$blue-100: #ffdbe5;
+$blue-200: #ffc8d8;
+$blue-300: #ff799f;
+$blue-400: #ff2160;
+$blue-500: #d6033f;
+$blue-600: #c50038;
+$blue-700: #89042a;
+$blue-800: #62031e;
+$blue-900: #4c0519;
+
+$blue: $blue-500;
+$blues: (
+  0: $blue-000,
+  1: $blue-100,
+  2: $blue-200,
+  3: $blue-300,
+  4: $blue-400,
+  5: $blue-500,
+  6: $blue-600,
+  7: $blue-700,
+  8: $blue-800,
+  9: $blue-900,
+);
+$hue-maps: (
+  "gray": $grays,
+  "blue": $blues,
+  "green": $greens,
+  "yellow": $yellows,
+  "orange": $oranges,
+  "red": $reds,
+  "purple": $purples,
+  "pink": $pinks,
+);
+
+// tokens primer computed from the blue ramp on import
+$text-blue: $blue-500;
+$border-blue: $blue-500;
+$border-blue-light: $blue-200;
+$bg-blue: $blue-500;
+$bg-blue-light: $blue-000;
+$box-shadow-focus: 0 0 0 3px rgba($blue-500, 0.3);
+$btn-input-focus-shadow: 0 0 0 0.2em rgba($blue-500, 0.3);
 
 $theme-white: lighten($black, 99%);
 $theme-black: lighten($black, 15%);
@@ -31,4 +84,4 @@ $theme-mask-black: transparentize($theme-black, 0.9);
 $theme-menu-width-sm: 85%;
 $theme-menu-width: 300px;
 $theme-menu-background: darken($theme-black, 10%);
-$theme-menu-active-background: darken($theme-blue, 15%);
+$theme-menu-active-background: darken($theme-carmine, 15%);

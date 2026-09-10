@@ -1,0 +1,574 @@
+// Dark mode
+//
+// Surfaces and syntax colours mirror @primer/css's dark scheme; the carmine
+// accent is brightened to keep AA contrast on dark backgrounds.
+//
+// Dark mode applies automatically through `prefers-color-scheme: dark`, or
+// explicitly through `data-theme="dark"` on <html> (set by assets/js/theme.js);
+// `data-theme="light"` opts out of the media query.
+
+$dark-bg: #0d1117;
+$dark-bg-elevated: #161b22;
+$dark-bg-inset: #21262d;
+$dark-border: #30363d;
+$dark-border-soft: #21262d;
+$dark-border-strong: #3d444d;
+$dark-text: #c9d1d9;
+$dark-text-muted: #8b949e;
+$dark-text-faint: #6e7681;
+$dark-red: #ff7b72;
+$dark-link: #ed6e92;
+$dark-link-hover: #f292ad;
+
+// Keep UA widgets (scrollbars, form controls) light unless dark mode is on.
+:root {
+  color-scheme: light;
+}
+
+@mixin dark-tokens {
+  color-scheme: dark;
+
+  // sidebar panels for the expanded table of contents
+  @for $level from 1 through 12 {
+    @if $level % 4 == 0 {
+      --toc-#{$level}: #{lighten($dark-bg-elevated, 12%)};
+    } @else {
+      --toc-#{$level}: #{lighten($dark-bg-elevated, $level % 4 * 3%)};
+    }
+  }
+}
+
+@mixin dark-mode {
+  //
+  // base
+  //
+
+  body {
+    color: $dark-text;
+    background-color: $dark-bg;
+  }
+
+  a {
+    color: $dark-link;
+  }
+
+  hr,
+  .rule {
+    border-bottom-color: $dark-border;
+  }
+
+  kbd {
+    color: $dark-text;
+    background-color: $dark-bg-elevated;
+    border-color: $dark-border;
+    box-shadow: inset 0 -1px 0 $dark-border;
+  }
+
+  .text-blue {
+    color: $dark-link !important;
+  }
+  .text-gray {
+    color: $dark-text-muted !important;
+  }
+  .text-gray-light {
+    color: $dark-text-faint !important;
+  }
+  .text-gray-dark {
+    color: $dark-text !important;
+  }
+
+  //
+  // layout
+  //
+
+  .container {
+    color: $dark-text;
+    background: $dark-bg;
+  }
+
+  @include breakpoint(xl) {
+    .container {
+      background: rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .content-wrap {
+    background: $dark-bg;
+  }
+
+  .sidebar {
+    background: $dark-bg-elevated;
+  }
+
+  .addons-wrap {
+    background-color: $dark-bg;
+
+    .status {
+      background-color: #131821;
+    }
+
+    .addons {
+      color: $dark-text-muted;
+    }
+  }
+
+  //
+  // table of contents
+  //
+
+  .toctree {
+    .caption {
+      color: lighten($theme-carmine, 25%);
+    }
+
+    > ul .toc.current a {
+      color: $dark-text;
+
+      &.current {
+        background: #2d333b;
+        border-top-color: $dark-border-strong;
+        border-bottom-color: $dark-border-strong;
+      }
+    }
+  }
+
+  //
+  // breadcrumbs
+  //
+
+  .breadcrumb-item::after {
+    color: #484f58;
+  }
+
+  .breadcrumb-item-selected,
+  .breadcrumb-item[aria-current]:not([aria-current="false"]) {
+    color: $dark-text-muted;
+  }
+
+  //
+  // markdown
+  //
+
+  .markdown-body a {
+    color: $dark-link;
+
+    &:hover {
+      color: $dark-link-hover;
+    }
+
+    code,
+    tt {
+      color: $dark-link;
+    }
+  }
+
+  .markdown-body {
+    h1,
+    h2 {
+      border-bottom-color: $dark-border-soft;
+    }
+
+    h6 {
+      color: $dark-text-muted;
+    }
+
+    hr {
+      background-color: $dark-border;
+    }
+
+    blockquote {
+      color: $dark-text-muted;
+      border-left-color: $dark-border;
+    }
+
+    code,
+    tt {
+      color: $dark-red;
+      background-color: $dark-bg-inset;
+      border-color: $dark-border;
+    }
+
+    pre > code {
+      color: $dark-text;
+    }
+
+    .highlight pre,
+    pre {
+      background-color: $dark-bg-elevated;
+      border-color: $dark-border;
+    }
+
+    img {
+      background-color: transparent;
+    }
+
+    .d-lang:after {
+      color: $dark-text-faint;
+    }
+
+    table {
+      th,
+      td {
+        border-color: $dark-border;
+      }
+
+      tr {
+        background-color: $dark-bg;
+        border-top-color: $dark-border;
+
+        &:nth-child(2n) {
+          background-color: $dark-bg-elevated;
+        }
+      }
+    }
+
+    .absent {
+      color: $dark-red;
+    }
+
+    .bg-yellow {
+      color: #1b1f23 !important;
+    }
+  }
+
+  //
+  // syntax highlighting
+  //
+
+  .highlight {
+    background-color: $dark-bg-elevated;
+
+    .c,
+    .c1,
+    .cd,
+    .ch,
+    .cm {
+      color: $dark-text-muted;
+      font-style: italic;
+    }
+
+    .cp {
+      color: $dark-text-muted;
+      font-weight: bold;
+    }
+
+    .cpf {
+      color: $dark-text-muted;
+      font-style: italic;
+    }
+
+    .cs {
+      color: $dark-text-muted;
+      font-weight: bold;
+      font-style: italic;
+    }
+
+    .err {
+      color: #ffa198;
+      background-color: rgba(248, 81, 73, 0.1);
+    }
+
+    .gd {
+      color: #ffa198;
+      background-color: rgba(248, 81, 73, 0.1);
+    }
+
+    .ge {
+      color: $dark-text;
+      font-style: italic;
+    }
+
+    .gr {
+      color: #ffa198;
+    }
+
+    .gh {
+      color: #79c0ff;
+    }
+
+    .gi {
+      color: #7ee787;
+      background-color: rgba(46, 160, 67, 0.1);
+    }
+
+    .go,
+    .gp {
+      color: $dark-text-muted;
+    }
+
+    .gs {
+      font-weight: bold;
+    }
+
+    .gu {
+      color: $dark-text-muted;
+    }
+
+    .gt {
+      color: #ffa198;
+    }
+
+    .k,
+    .kc,
+    .kd,
+    .kn,
+    .kp,
+    .kr,
+    .kv {
+      color: #ff7b72;
+      font-weight: bold;
+    }
+
+    .kt {
+      color: #ffa657;
+      font-weight: bold;
+    }
+
+    .m,
+    .mb,
+    .mf,
+    .mh,
+    .mi,
+    .il,
+    .mo,
+    .mx {
+      color: #79c0ff;
+    }
+
+    .sa {
+      color: #ff7b72;
+      font-weight: bold;
+    }
+
+    .s,
+    .sb,
+    .sc,
+    .sd,
+    .s1,
+    .s2,
+    .se,
+    .sh,
+    .si,
+    .sx,
+    .dl {
+      color: #a5d6ff;
+    }
+
+    .sr {
+      color: #7ee787;
+    }
+
+    .ss {
+      color: #79c0ff;
+    }
+
+    .na {
+      color: #79c0ff;
+    }
+
+    .bp {
+      color: #ffa657;
+    }
+
+    .nb {
+      color: #79c0ff;
+    }
+
+    .nc {
+      color: #ffa657;
+      font-weight: bold;
+    }
+
+    .no {
+      color: #79c0ff;
+    }
+
+    .nd {
+      color: #d2a8ff;
+      font-weight: bold;
+    }
+
+    .ni {
+      color: #ffa657;
+    }
+
+    .ne,
+    .nf,
+    .fm,
+    .nl {
+      color: #d2a8ff;
+      font-weight: bold;
+    }
+
+    .nn {
+      color: #ffa657;
+    }
+
+    .nt {
+      color: #7ee787;
+    }
+
+    .nv,
+    .vc,
+    .vg,
+    .vi,
+    .vm {
+      color: #ffa657;
+    }
+
+    .ow,
+    .o {
+      color: #ff7b72;
+      font-weight: bold;
+    }
+
+    .w {
+      color: #484f58;
+    }
+  }
+
+  //
+  // utilities
+  //
+
+  .border,
+  .border-x,
+  .border-y,
+  .border-top,
+  .border-right,
+  .border-bottom,
+  .border-left {
+    border-color: $dark-border !important;
+  }
+
+  //
+  // toasts
+  //
+
+  .toasts {
+    &.note {
+      background-color: #2b0f1d;
+
+      .title {
+        background: #590c26;
+      }
+    }
+
+    &.tip {
+      background-color: #0f2b2b;
+
+      .title {
+        background: #12524a;
+      }
+    }
+
+    &.warning {
+      background-color: #2e2119;
+
+      .title {
+        background: #5f3a1b;
+      }
+    }
+
+    &.danger {
+      background-color: #2e1a1d;
+
+      .title {
+        background: #602725;
+      }
+    }
+  }
+
+  //
+  // buttons & forms
+  //
+
+  .btn {
+    color: $dark-text;
+    background-color: $dark-bg-inset;
+    border-color: $dark-border;
+    box-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.03);
+
+    &:hover,
+    &.hover {
+      background-color: $dark-border;
+    }
+
+    &:active,
+    &.selected,
+    &[aria-selected="true"] {
+      background-color: #282e33;
+      box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    &:disabled,
+    &.disabled,
+    &[aria-disabled="true"] {
+      color: $dark-text-faint;
+      background-color: $dark-bg-elevated;
+    }
+
+    &:focus,
+    &.focus {
+      box-shadow: 0 0 0 3px rgba($dark-link, 0.4);
+    }
+
+    .octicon {
+      color: $dark-text-muted;
+    }
+  }
+
+  [open] > .btn {
+    background-color: $dark-border;
+  }
+
+  .form-control,
+  .form-select {
+    color: $dark-text;
+    background-color: $dark-bg;
+    border-color: $dark-border;
+
+    &.focus,
+    &:focus {
+      border-color: $dark-link;
+      box-shadow: 0 0 0 3px rgba($dark-link, 0.3);
+    }
+  }
+
+  .input-contrast {
+    background-color: $dark-bg-inset;
+
+    &:focus {
+      background-color: $dark-bg;
+    }
+  }
+
+  ::placeholder {
+    color: $dark-text-faint;
+  }
+
+  // search box, on the carmine header
+  .header input {
+    color: $theme-white;
+    background-color: rgba(0, 0, 0, 0.35);
+    border-color: rgba(0, 0, 0, 0.4);
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+}
+
+html[data-theme="dark"] {
+  @include dark-tokens;
+  @include dark-mode;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    @include dark-tokens;
+    @include dark-mode;
+  }
+}
