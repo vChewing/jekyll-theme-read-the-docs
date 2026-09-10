@@ -74,3 +74,15 @@
     max-width: $width-xl - $theme-menu-width;
   }
 }
+
+// vChewing customization: center the docs layout when the viewport is wider than the design width ($width-xl = 1280px)
+@include breakpoint(xl) {
+  .sidebar-wrap,
+  .addons-wrap {
+    left: calc(50% - #{$width-xl * 0.5});
+  }
+
+  .content-wrap {
+    margin-left: calc(50% - #{$width-xl * 0.5 - $theme-menu-width});
+  }
+}
