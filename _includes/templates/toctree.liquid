@@ -24,6 +24,12 @@
 </ul>
 
 {% comment %} list the root dirs {% endcomment %}
+{%- assign toctree_page = site_pages | where: "url", page.url | first -%}
+{%- assign toctree_page_srcdir = toctree_page.path | remove: toctree_page.name | prepend: '/' -%}
 {%- for workdir in workdir_dirs -%}
-  {%- include templates/_toctree.liquid -%}
+  {%- assign dir_is_current = false -%}
+  {%- if toctree_page_srcdir contains workdir -%}{%- assign dir_is_current = true -%}{%- endif -%}
+  <details class="toc-dir" data-dir="{{ workdir }}"{% if dir_is_current %} data-current="1" open{% endif %}>
+    {%- include templates/_toctree.liquid -%}
+  </details>
 {%- endfor -%}

@@ -33,6 +33,52 @@
     line-height: 32px;
   }
 
+  // 大分類（root sub-directory）預設收合，用 <details> 實現。
+  details.toc-dir {
+    > summary {
+      position: relative; // 讓標題連結的點擊區能延伸至整列
+      cursor: pointer;
+      list-style: none; // 用自繪箭頭取代瀏覽器預設標記
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      > a {
+        color: inherit;
+        padding: 0;
+
+        // 整列（左側箭頭區除外）都是「連到該分類首頁」的點擊區；
+        // 左側 2em 留給 summary 本身，也就是展開／收合。
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 2em;
+        }
+      }
+
+      &::before {
+        content: "\25B8";
+        display: inline-block;
+        width: 1em;
+        transition: transform 0.15s ease;
+      }
+    }
+
+    &[open] > summary::before {
+      transform: rotate(90deg);
+    }
+
+    // 展開後的子項目清單：往內縮排，並加一層淡灰底標示層級。
+    &[open] > ul {
+      padding-left: 2em;
+      background-color: $theme-mask-gray;
+    }
+  }
+
   .fa {
     margin-right: 2px;
   }

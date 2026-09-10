@@ -79,6 +79,7 @@ $theme-code-inline-background: darken($theme-white, 2%);
 // theme mask
 $theme-mask-white: transparentize($theme-white, 0.9);
 $theme-mask-black: transparentize($theme-black, 0.9);
+$theme-mask-gray: transparentize($gray-500, 0.9);
 
 // theme menu
 $theme-menu-width-sm: 85%;

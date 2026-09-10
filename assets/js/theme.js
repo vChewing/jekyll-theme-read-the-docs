@@ -243,6 +243,40 @@ function theme() {
   paint();
 }
 
+function tocDirs() {
+  const KEY = "toc-open-dirs";
+  let saved = {};
+  try {
+    saved = JSON.parse(get(KEY) || "{}") || {};
+  } catch (e) {
+    saved = {};
+  }
+
+  $(".toctree details.toc-dir").each(function () {
+    const $dir = $(this);
+    const key = $dir.attr("data-dir") || "";
+
+    // 當前頁面所屬的大分類一律保持展開，其餘預設收合。
+    if ($dir.is("[data-current]")) {
+      this.open = true;
+      return;
+    }
+
+    if (Object.prototype.hasOwnProperty.call(saved, key)) {
+      this.open = !!saved[key];
+    }
+
+    $dir.on("toggle", function () {
+      saved[key] = this.open;
+      try {
+        set(KEY, JSON.stringify(saved));
+      } catch (e) {
+        debug(e.message);
+      }
+    });
+  });
+}
+
 function highlight() {
   const _sanitizeUrl = DOMPurify.sanitize(location.href);
   let text = new URL(_sanitizeUrl).searchParams.get("highlight");
@@ -323,6 +357,7 @@ initialize(location.hash);
 restore();
 highlight();
 theme();
+tocDirs();
 
 /* nested ul */
 $(".toc ul")
