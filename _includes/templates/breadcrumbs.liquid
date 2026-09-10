@@ -17,11 +17,13 @@
             {%- else -%}
                 {%- assign blocks = page.path | split: "/" -%}
                 {%- for block in blocks -%}
+                    {%- assign block_url = "/" | append: block | append: "/" -%}
+                    {%- assign dir_page = site.pages | where: "url", block_url | first -%}
                     <li class="breadcrumb-item" {% if forloop.last %}aria-current="page"{% endif %}>
                         {%- if forloop.last -%}
-                            {{ page.name }}
+                            {{ page.title | default: page.name }}
                         {%- else -%}
-                            <a href="{{ site.baseurl }}/{% for block in blocks limit: forloop.index %}{{ block }}/{% endfor %}">{{ block }}</a>
+                            <a href="{{ site.baseurl }}/{% for block in blocks limit: forloop.index %}{{ block }}/{% endfor %}">{{ dir_page.title | default: block }}</a>
                         {%- endif -%}
                     </li>
                 {%- endfor -%}
