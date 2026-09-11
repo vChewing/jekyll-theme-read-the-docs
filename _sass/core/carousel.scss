@@ -1,0 +1,144 @@
+// <carousel> 與 <centerbox> 這兩個正文用的自訂區塊。
+//
+// <carousel timesec="9"> 由 assets/js/theme.js 初始化：收集其中的 <img>，
+//   若沒有 <img> 則代為解析 markdown 圖片語法（kramdown 不解析自訂標籤內的 markdown）。
+// <centerbox> 讓其內所有元素置中。
+
+// 同時支援自訂標籤 <centerbox> 與 class 寫法
+centerbox,
+.centerbox {
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
+
+  > * {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  img,
+  video,
+  table {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  // 清單置中、但條目文字維持靠左才好讀
+  ul,
+  ol {
+    display: inline-block;
+    text-align: left;
+  }
+}
+
+carousel {
+  position: relative;
+  display: block;
+  margin: 1.5rem auto;
+  text-align: center;
+
+  // 尚未初始化前整塊藏起來，避免露出未解析的 markdown 原文
+  &:not(.carousel-ready) {
+    display: none;
+  }
+}
+
+.carousel_title {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+.carousel_subtitle {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  opacity: 0.75;
+}
+
+.carousel_viewport {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.carousel_slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+
+  // 第一張留在文件流內，讓容器自動取得高度（其餘的絕對定位疊在其上）
+  &:first-child {
+    position: static;
+    opacity: 1;
+  }
+
+  &.is-active {
+    opacity: 1;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+
+.carousel_slide:not(:first-child) img {
+  height: 100%;
+  object-fit: contain;
+}
+
+.carousel_arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  color: inherit;
+  font-size: 18px;
+  line-height: 1;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  cursor: pointer;
+  transform: translateY(-50%);
+  opacity: 0.6;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &--prev {
+    left: 8px;
+  }
+
+  &--next {
+    right: 8px;
+  }
+}
+
+.carousel_dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 0.6rem;
+}
+
+.carousel_dot {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  background: rgba(128, 128, 128, 0.45);
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &.is-active {
+    background: $theme-carmine;
+  }
+}

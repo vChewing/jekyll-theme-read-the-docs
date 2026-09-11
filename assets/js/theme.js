@@ -261,6 +261,102 @@ function theme() {
   paint();
 }
 
+function carousel() {
+  $("carousel").each(function () {
+    var $c = $(this);
+    var interval = (parseFloat($c.attr("timesec")) || 9) * 1000;
+
+    // 收集圖片：優先取 <img>；都沒有的話代為解析 markdown 圖片語法
+    //（kramdown 不會解析自訂標籤內的 markdown，所以由前端補上）
+    var items = [];
+    $c.find("img").each(function () {
+      items.push({
+        src: this.getAttribute("src"),
+        alt: this.getAttribute("alt") || "",
+        title: this.getAttribute("title") || "",
+      });
+    });
+    if (!items.length) {
+      var re = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/g;
+      var m;
+      while ((m = re.exec($c.text())) !== null) {
+        items.push({ src: m[2], alt: m[1], title: m[3] || "" });
+      }
+    }
+    if (!items.length) return;
+
+    // 重建內容：標題、副標、視窗、箭頭、圓點
+    var $title = $c.find("carousel_title").first();
+    var $subtitle = $c.find("carousel_subtitle").first();
+    $c.empty();
+    if ($title.length) $c.append($title.addClass("carousel_title"));
+    if ($subtitle.length) $c.append($subtitle.addClass("carousel_subtitle"));
+
+    var $viewport = $('<div class="carousel_viewport"></div>').appendTo($c);
+    var $dots = $('<div class="carousel_dots"></div>').appendTo($c);
+    var slides = [];
+
+    items.forEach(function (it, i) {
+      var $slide = $('<div class="carousel_slide"></div>').appendTo($viewport);
+      $("<img/>")
+        .attr({ src: it.src, alt: it.alt, title: it.title, loading: i ? "lazy" : "eager" })
+        .appendTo($slide);
+      slides.push($slide);
+      $('<button class="carousel_dot" type="button"></button>')
+        .attr("aria-label", it.alt || "slide " + (i + 1))
+        .on("click", function () {
+          show(i, true);
+        })
+        .appendTo($dots);
+    });
+
+    var index = 0;
+    var timer = null;
+    function show(i, manual) {
+      index = (i + slides.length) % slides.length;
+      slides.forEach(function ($s, k) {
+        $s.toggleClass("is-active", k === index);
+      });
+      $dots.children().each(function (k) {
+        $(this).toggleClass("is-active", k === index);
+      });
+      if (manual) restart();
+    }
+    function restart() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(function () {
+        show(index + 1);
+      }, interval);
+    }
+
+    if (slides.length > 1) {
+      $('<button class="carousel_arrow carousel_arrow--prev" type="button" aria-label="Previous">\u2039</button>')
+        .on("click", function () {
+          show(index - 1, true);
+        })
+        .appendTo($c);
+      $('<button class="carousel_arrow carousel_arrow--next" type="button" aria-label="Next">\u203a</button>')
+        .on("click", function () {
+          show(index + 1, true);
+        })
+        .appendTo($c);
+      restart();
+      $c.on("mouseenter focusin", function () {
+        if (timer) {
+          clearInterval(timer);
+          timer = null;
+        }
+      });
+      $c.on("mouseleave focusout", function () {
+        if (!timer) restart();
+      });
+    }
+
+    $c.addClass("carousel-ready");
+    show(0);
+  });
+}
+
 function tocDirs() {
   const KEY = "toc-open-dirs";
   let saved = {};
@@ -373,6 +469,7 @@ restore();
 highlight();
 theme();
 tocDirs();
+carousel();
 
 /* nested ul */
 $(".toc ul")
