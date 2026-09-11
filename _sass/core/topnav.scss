@@ -145,3 +145,33 @@ body {
     display: block;
   }
 }
+
+// 頁面用 front matter 的 autohide_article_chapter_index 關掉篇章結構後，
+// 若側欄本來就沒有下級內容（根層頁面，如全站主頁），寬螢幕就把整條側欄收掉。
+// 抽屜模式（< $topnav-breakpoint）必須保留側欄，否則一級導航無處可去。
+@media (min-width: $topnav-breakpoint) {
+  body.sidebar-hidden {
+    .sidebar-wrap {
+      display: none;
+    }
+
+    // 側欄收掉時，正文填滿版：寬度與頂置導航列一致（$width-xl）並置中
+    .content-wrap {
+      max-width: $width-xl;
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+}
+
+// 錨點定位：固定導航列會蓋住跳轉目標的頂端，補上相等高度的留白。
+// （sidebar 的篇章結構與正文標題旁的錨點链接都是原生 #hash 跳轉）
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6,
+.markdown-body [id] {
+  scroll-margin-top: $topnav-height + 12px;
+}

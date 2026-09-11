@@ -110,6 +110,9 @@ function toggleCurrent(link) {
 }
 
 function toc() {
+  // 頁面可用 front matter 的 autohide_article_chapter_index 關掉側欄裡的篇章結構
+  if (document.body.classList.contains("autohide-chapter-index")) return;
+
   // 側邊欄的當前條目（一般內頁）
   const $currentLi = $(".toctree li.current");
   let $list = null;
