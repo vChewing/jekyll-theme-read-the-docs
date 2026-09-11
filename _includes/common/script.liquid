@@ -1,6 +1,8 @@
 <script>
-    // Apply the saved theme before the page renders, to avoid a flash of the
-    // wrong colour scheme (see assets/js/theme.js).
+    /* Apply the saved theme before the page renders, to avoid a flash of the
+       wrong colour scheme (see assets/js/theme.js).
+       注意：compress layout 會把整頁壓成單行，inline script 內一律用區塊註解，
+       否則 // 行註解會吃掉後續程式碼。 */
     (function () {
         try {
             var theme = localStorage.getItem("theme");
@@ -8,7 +10,33 @@
                 document.documentElement.setAttribute("data-theme", theme);
             }
         } catch (e) {
-            // localStorage may be unavailable (private mode, blocked cookies)
+            /* localStorage may be unavailable (private mode, blocked cookies) */
+        }
+    })();
+</script>
+<script>
+    /* 依瀏覽器語言偏好（或使用者先前以切換鈕所做的選擇），於首次繪製前決定繁簡模式：
+       簡體模式先把 <html lang> 改為 zh-Hans，頁面文字的繁轉簡由 assets/js/han-convert.js 執行。 */
+    (function () {
+        function prefersSimplified() {
+            var languages = navigator.languages || [navigator.language || ""];
+            var tag = String(languages[0] || "").toLowerCase();
+            if (tag.indexOf("zh") !== 0) return false;
+            if (tag.indexOf("hant") !== -1 || /-(tw|hk|mo)(-|$)/.test(tag)) return false;
+            return true;
+        }
+        try {
+            var saved = localStorage.getItem("han");
+            var mode = (saved === "s" || saved === "t") ? saved : (prefersSimplified() ? "s" : "t");
+            window.__hanMode = mode;
+            var root = document.documentElement;
+            root.setAttribute("data-han-lang", root.getAttribute("lang") || "");
+            if (mode === "s") {
+                root.setAttribute("lang", "zh-Hans");
+                root.className += " han-s";
+            }
+        } catch (e) {
+            /* localStorage 可能不可用（隱私模式、封鎖 cookie） */
         }
     })();
 </script>
@@ -26,7 +54,9 @@
             search_results_not_found: "{{ __.search_results_not_found | default: 'Your search did not match any documents, please make sure that all characters are spelled correctly!' }}",
             theme_auto: "{{ __.theme_auto | default: 'Theme: automatic' }}",
             theme_light: "{{ __.theme_light | default: 'Theme: light' }}",
-            theme_dark: "{{ __.theme_dark | default: 'Theme: dark' }}"
+            theme_dark: "{{ __.theme_dark | default: 'Theme: dark' }}",
+            han_traditional: "{{ __.han_traditional | default: 'Traditional Chinese' }}",
+            han_simplified: "{{ __.han_simplified | default: 'Simplified Chinese' }}"
         }
     };
 </script>

@@ -12,3 +12,4 @@
 
 {%- assign asset_version = site.github.build_revision | default: site.time | date: "%s" -%}
 <script src="{{ base }}/assets/js/theme{% if site.debug.dist != false %}.min{% endif %}.js?v={{ asset_version }}"></script>
+<script src="{{ base }}/assets/js/han-convert.js?v={{ asset_version }}"></script>
