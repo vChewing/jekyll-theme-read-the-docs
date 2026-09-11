@@ -368,6 +368,78 @@ function carousel() {
   });
 }
 
+function cardset() {
+  // <cardset>/<card>：橫向卡片迴廊（多張並見、用戶驅動、無自動輪切）。
+  // 內容由 kramdown 以 markdown="block" 正常渲染；這裡只做結構重排：
+  // 把卡片搬進可捲動視窗、補箭頭，不重寫內容。
+  $("cardset").each(function () {
+    var $set = $(this);
+    var $cards = $set.children("card");
+    if (!$cards.length) return;
+
+    // 標題、副標：就地加 class、不搬動——若作者用 <centerbox> 包住它們，
+    // 包裝須原樣保留（搬走會把置中包裝拆掉）。卡片移入視窗後，把視窗接在後面即可。
+    $set.find("cardset_title").first().addClass("cardset_title");
+    $set.find("cardset_subtitle").first().addClass("cardset_subtitle");
+
+    var $viewport = $('<div class="cardset_viewport"></div>');
+    $cards.each(function () {
+      var $card = $(this).addClass("cardset_card");
+      $card.find("card_title").first().addClass("cardset_card_title");
+      $viewport.append($card);
+    });
+    $set.append($viewport);
+
+    if ($cards.length > 1) {
+      var $prev = $(
+        '<button class="cardset_arrow cardset_arrow--prev" type="button" aria-label="Previous">\u25c0</button>'
+      );
+      var $next = $(
+        '<button class="cardset_arrow cardset_arrow--next" type="button" aria-label="Next">\u25ba</button>'
+      );
+      var el = $viewport.get(0);
+
+      // 一次捲動的距離＝前兩張卡左緣之差（含卡距）
+      function step() {
+        var nodes = $viewport.children().get();
+        if (nodes.length < 2) return nodes[0] ? nodes[0].getBoundingClientRect().width : 0;
+        return nodes[1].offsetLeft - nodes[0].offsetLeft;
+      }
+      function updateArrows() {
+        var max = el.scrollWidth - el.clientWidth;
+        // 溢出不足半張卡時視為全部入屏（強制 snap 下也捲不動，箭頭無意義）
+        $set.toggleClass("cardset-static", max < Math.max(2, step() * 0.5));
+        $prev.prop("disabled", el.scrollLeft <= 2);
+        $next.prop("disabled", el.scrollLeft >= max - 2);
+      }
+
+      // 一次捲動一張卡；老瀏覽器（無 ScrollToOptions）退回瞬時捲動
+      function scrollByStep(dir) {
+        if ("scrollBehavior" in document.documentElement.style) {
+          el.scrollBy({ left: dir * step(), behavior: "smooth" });
+        } else {
+          el.scrollLeft += dir * step();
+        }
+      }
+      $prev.on("click", function () {
+        scrollByStep(-1);
+      });
+      $next.on("click", function () {
+        scrollByStep(1);
+      });
+      $viewport.on("scroll", updateArrows);
+      $(window).on("resize", updateArrows);
+      // 從收合的章節展開等情況造成尺寸變化時，重新評估箭頭狀態
+      if (window.ResizeObserver) new ResizeObserver(updateArrows).observe(el);
+
+      $set.append($prev).append($next);
+      updateArrows();
+    }
+
+    $set.addClass("cardset-ready");
+  });
+}
+
 function collapseH2Sections() {
   // 頁面可用 front matter 的 autocollapse_h2_sections 把各 h2 標題以下的內容自動摺疊
   if (!document.body.classList.contains("autocollapse-h2-sections")) return;
@@ -558,6 +630,7 @@ highlight();
 theme();
 tocDirs();
 carousel();
+cardset();
 collapseH2Sections();
 
 /* nested ul */
