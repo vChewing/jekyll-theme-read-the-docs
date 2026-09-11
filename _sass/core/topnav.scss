@@ -49,10 +49,21 @@
   align-items: center;
   gap: 2px;
   min-width: 0;
-  overflow: hidden;
+  // 寬度不足時橫向捲動（不讓 trailing 按鈕被裁掉/被檢索框遮住）；捲軸隱藏
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   a {
     display: inline-flex;
+    flex-shrink: 0;
     align-items: center;
     padding: 6px 12px;
     border-radius: 6px;
@@ -88,6 +99,13 @@
     border: 1px solid darken($theme-carmine, 5%);
     border-radius: 50px;
     font-size: 80%;
+  }
+}
+
+// 頁寬未超過 1080px 時，檢索框寬度減半（200px → 100px），把空間讓給一級導航列
+@media (max-width: 1080px) {
+  .topnav-search input {
+    width: 100px;
   }
 }
 
