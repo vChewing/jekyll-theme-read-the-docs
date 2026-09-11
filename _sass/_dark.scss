@@ -115,7 +115,7 @@ $dark-link-hover: #f292ad;
       color: lighten($theme-carmine, 25%);
     }
 
-    > ul .toc.current a {
+    .toc.current a {
       color: $dark-text;
 
       &.current {
@@ -173,6 +173,7 @@ $dark-link-hover: #f292ad;
     blockquote {
       color: $dark-text-muted;
       border-left-color: $dark-border;
+      border-right-color: $dark-border;
     }
 
     code,

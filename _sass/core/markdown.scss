@@ -110,4 +110,11 @@
       white-space: pre;
     }
   }
+
+  // 寬版（電腦，未觸發任何窄版樣式）時，引言至多占容器寬度的 85%。
+  @media (min-width: $topnav-breakpoint) {
+    blockquote {
+      max-width: 85%;
+    }
+  }
 }

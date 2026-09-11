@@ -80,7 +80,7 @@ html[dir="rtl"] {
       direction: ltr;
     }
     blockquote {
-      border-left: none;
+      border-left: 0.25em $border-style lighten($gray-300, 5%);
       border-right: 0.25em $border-style lighten($gray-300, 5%);
     }
 

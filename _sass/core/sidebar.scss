@@ -115,31 +115,36 @@
       }
     }
 
-    .toc.current {
-      // all expanded links
-      a {
-        color: #404040;
-
-        &:hover {
-          background: $theme-mask-white;
-        }
-        &.current {
-          font-weight: bold;
-          background: $theme-white;
-          border-top: 1px solid var(--toc-2);
-          border-bottom: 1px solid var(--toc-2);
-        }
-      }
-      // parent links
-      > a {
-        .fa-plus-square-o {
-          @extend .fa-minus-square-o;
-        }
-      }
-    }
     // fixed level-1's hover mask
     > .toc.current {
       background: var(--toc-1);
+    }
+  }
+
+  // 當前區段（當前分類的展開清單、當前頁面的章節樹）之文字色。
+  // 亮色模式下這些面板是淺色的（--toc-*），故連結須為深色才看得見。
+  // 注意：選擇器不可限定為 `> ul` 直屬子代——分類清單位在 details.toc-dir 內，
+  // 會 miss 掉（曾造成亮色模式的白底白字）。
+  .toc.current {
+    // all expanded links
+    a {
+      color: #404040;
+
+      &:hover {
+        background: $theme-mask-white;
+      }
+      &.current {
+        font-weight: bold;
+        background: $theme-white;
+        border-top: 1px solid var(--toc-2);
+        border-bottom: 1px solid var(--toc-2);
+      }
+    }
+    // parent links
+    > a {
+      .fa-plus-square-o {
+        @extend .fa-minus-square-o;
+      }
     }
   }
 }

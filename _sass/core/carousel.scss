@@ -104,7 +104,8 @@ carousel {
   width: 36px;
   height: 36px;
   padding: 0;
-  color: inherit;
+  // 箭頭用純黑前景：按鈕底色偏白，若 inherit 則深色模式下無對比
+  color: #000;
   font-size: 18px;
   line-height: 1;
   background: rgba(255, 255, 255, 0.75);
