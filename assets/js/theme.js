@@ -354,10 +354,7 @@ $(document).on("scroll", function () {
 });
 
 $("#toggle").on("click", function () {
-  $(".sidebar-wrap,.content-wrap,.addons-wrap").toggleClass("shift");
-});
-$(".status").on("click", function () {
-  $(".addons").toggleClass("d-none");
+  $(".sidebar-wrap,.content-wrap").toggleClass("shift");
 });
 
 if (location.pathname == `${ui.baseurl}/search.html`) {

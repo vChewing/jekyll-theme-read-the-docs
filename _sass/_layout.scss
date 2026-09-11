@@ -23,13 +23,6 @@
   }
 }
 
-.addons-wrap {
-  top: $topnav-height;
-  max-height: calc(100% - #{$topnav-height});
-
-  @extend .menu-sm;
-}
-
 .content-wrap {
   &.shift {
     position: fixed;
@@ -60,10 +53,6 @@
     }
   }
 
-  .addons-wrap {
-    @extend .menu-md;
-  }
-
   .content-wrap {
     margin-left: $theme-menu-width;
 
@@ -83,14 +72,12 @@
 
 // vChewing customization: center the docs layout when the viewport is wider than the design width ($width-xl = 1280px)
 @include breakpoint(xl) {
-  .sidebar-wrap,
-  .addons-wrap {
+  .sidebar-wrap {
     left: calc(50% - #{$width-xl * 0.5});
   }
 
   // 側欄常駐時，殘留的 .shift（例如先前在窄視窗開過抽屜）不應再影響位置
-  .sidebar-wrap.shift,
-  .addons-wrap.shift {
+  .sidebar-wrap.shift {
     left: calc(50% - #{$width-xl * 0.5});
   }
 
