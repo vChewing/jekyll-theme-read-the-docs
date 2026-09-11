@@ -3,6 +3,9 @@
 // <carousel timesec="9"> 由 assets/js/theme.js 初始化：收集其中的 <img>，
 //   若沒有 <img> 則代為解析 markdown 圖片語法（kramdown 不解析自訂標籤內的 markdown）。
 // <centerbox> 讓其內所有元素置中。
+//   注意：kramdown 不解析自訂標籤內的 markdown；框內含 markdown（如表格）時，
+//   開頭標籤須寫成 <centerbox markdown="block">（markdown="1" 對自訂標籤無效），
+//   且表格與 </centerbox> 之間須留一個空行，否則表格不會被編譯。
 
 // 同時支援自訂標籤 <centerbox> 與 class 寫法
 centerbox,
@@ -35,6 +38,8 @@ centerbox,
 carousel {
   position: relative;
   display: block;
+  // 圖片最大寬度
+  max-width: 960px;
   margin: 1.5rem auto;
   text-align: center;
 

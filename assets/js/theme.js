@@ -312,7 +312,17 @@ function carousel() {
 
     var index = 0;
     var timer = null;
+
+    // 輪切到某張時讓其中的 GIF 從第一幀重播：換上全新的 <img> 節點，
+    // 動畫時間軸即重新起算（同一個 src 走快取，不會重新下載）。
+    function replayGif($slide) {
+      var img = $slide.find("img").get(0);
+      if (!img || !/\.gif(\?|#|$)/i.test(img.getAttribute("src") || "")) return;
+      img.parentNode.replaceChild(img.cloneNode(true), img);
+    }
+
     function show(i, manual) {
+      var prev = index;
       index = (i + slides.length) % slides.length;
       slides.forEach(function ($s, k) {
         $s.toggleClass("is-active", k === index);
@@ -320,6 +330,7 @@ function carousel() {
       $dots.children().each(function (k) {
         $(this).toggleClass("is-active", k === index);
       });
+      if (index !== prev) replayGif(slides[index]);
       if (manual) restart();
     }
     function restart() {
@@ -330,12 +341,12 @@ function carousel() {
     }
 
     if (slides.length > 1) {
-      $('<button class="carousel_arrow carousel_arrow--prev" type="button" aria-label="Previous">\u2039</button>')
+      $('<button class="carousel_arrow carousel_arrow--prev" type="button" aria-label="Previous">\u25c0</button>')
         .on("click", function () {
           show(index - 1, true);
         })
         .appendTo($c);
-      $('<button class="carousel_arrow carousel_arrow--next" type="button" aria-label="Next">\u203a</button>')
+      $('<button class="carousel_arrow carousel_arrow--next" type="button" aria-label="Next">\u25ba</button>')
         .on("click", function () {
           show(index + 1, true);
         })
