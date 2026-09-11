@@ -12,7 +12,7 @@ html[dir="rtl"] {
   // layout
   .menu-sm {
     left: unset;
-    right: -$theme-menu-width-sm;
+    right: -$theme-menu-width;
 
     &.shift {
       left: unset;
@@ -22,11 +22,11 @@ html[dir="rtl"] {
   .content-wrap {
     &.shift {
       left: unset;
-      right: $theme-menu-width-sm;
+      right: $theme-menu-width;
     }
   }
 
-  @include breakpoint(md) {
+  @media (min-width: $topnav-breakpoint) {
     .menu-md {
       left: unset;
       right: 0;

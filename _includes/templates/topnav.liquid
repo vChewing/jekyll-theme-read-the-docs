@@ -1,0 +1,52 @@
+{%- comment -%}
+  頂置導航列：承載所有「一級導航」（根層頁面與一級分類）。
+  側邊欄只負責二級導航（當前分類的文章清單、當前頁面的文章結構）。
+  窄螢幕時，一級連結收進漢堡選單（右端按鈕）打開的側邊欄抽屜。
+{%- endcomment -%}
+{%- assign topnav_page = site_pages | where: "url", page.url | first -%}
+{%- assign topnav_srcdir = topnav_page.path | remove: topnav_page.name | prepend: '/' -%}
+{%- assign topnav_root_group = site_file_groups | where: "name", "/" | first -%}
+{%- assign topnav_root_pages = topnav_root_group.items -%}
+{%- unless topnav_root_pages -%}{%- assign topnav_root_pages = "" | split: "" -%}{%- endunless -%}
+
+<nav class="topnav" role="navigation" aria-label="main navigation">
+    <div class="topnav-container">
+        <a class="topnav-logo" href="{{ site.baseurl }}/" title="{{ site.description }}">
+            <img
+                src="{{ site.baseurl }}/site_logo.png"
+                srcset="{{ site.baseurl }}/site_logo.png 1x, {{ site.baseurl }}/site_logo@2x.png 2x"
+                alt="{{ site.title }}">
+        </a>
+
+        <div class="topnav-links">
+            {%- for item in topnav_root_pages -%}
+                <a href="{{ item.url | relative_url }}"{% if page.url == item.url %} class="active" aria-current="page"{% endif %}>{{ item.title | default: item.name }}</a>
+            {%- endfor -%}
+            {%- for item in site_dirs -%}
+                <a href="{{ item.url | relative_url }}"{% if topnav_srcdir contains item.url %} class="active"{% endif %}>{{ item.title | default: item.url }}</a>
+            {%- endfor -%}
+        </div>
+
+        <div class="topnav-actions">
+            <form class="topnav-search" action="{{ site.baseurl }}/search.html" method="get" autocomplete="off" role="search">
+                <input
+                    class="form-control input-block input-sm"
+                    type="text"
+                    name="q"
+                    placeholder="{{ __.search_docs | default: 'Search docs...' }}"
+                    aria-label="{{ __.search_docs | default: 'Search docs...' }}">
+            </form>
+            <button class="btn-octicon topnav-icon-btn theme-toggle" type="button" title="Theme" aria-label="Theme">
+                <i class="fa fa-adjust"></i>
+            </button>
+            <button
+                class="btn-octicon topnav-icon-btn topnav-menu-toggle"
+                id="toggle"
+                type="button"
+                title="Menu"
+                aria-label="Toggle menu">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</nav>

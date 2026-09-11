@@ -33,6 +33,22 @@
     line-height: 32px;
   }
 
+  // 寬螢幕時側邊欄只負責二級導航：只顯示「當前區段」（當前分類的文章清單、
+  // 當前頁面的條目與頁內結構），其一級區段全交給頂置導航列。
+  @media (min-width: $topnav-breakpoint) {
+    > ul:not(.current-section) {
+      display: none;
+    }
+
+    > ul.current-section > li:not(.current) {
+      display: none;
+    }
+
+    details.toc-dir:not(.current-section) {
+      display: none;
+    }
+  }
+
   // 大分類（root sub-directory）預設收合，用 <details> 實現。
   details.toc-dir {
     > summary {

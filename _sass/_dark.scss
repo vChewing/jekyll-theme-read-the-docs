@@ -52,6 +52,12 @@ $dark-link-hover: #f292ad;
     color: $dark-link;
   }
 
+  // 頂置導航列自帶胭脂底色，深色模式下仍應維持白字（不要套用深色連結色）
+  .topnav a,
+  .topnav-icon-btn {
+    color: $theme-white;
+  }
+
   hr,
   .rule {
     border-bottom-color: $dark-border;

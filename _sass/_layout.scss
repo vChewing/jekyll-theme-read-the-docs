@@ -1,8 +1,10 @@
 .menu-sm {
   position: fixed;
   bottom: 0;
-  left: -$theme-menu-width-sm;
-  width: $theme-menu-width-sm;
+  // 抽屜寬度：不超過 300px（$theme-menu-width）；窄螢幕再受 85% 上限約束
+  left: -$theme-menu-width;
+  width: $theme-menu-width;
+  max-width: $theme-menu-width-sm;
   max-height: 100%;
 
   &.shift {
@@ -11,7 +13,8 @@
 }
 
 .sidebar-wrap {
-  top: 0;
+  top: $topnav-height;
+  max-height: calc(100% - #{$topnav-height});
 
   @extend .menu-sm;
 
@@ -21,6 +24,9 @@
 }
 
 .addons-wrap {
+  top: $topnav-height;
+  max-height: calc(100% - #{$topnav-height});
+
   @extend .menu-sm;
 }
 
@@ -29,12 +35,12 @@
     position: fixed;
     top: 0;
     bottom: 0;
-    left: $theme-menu-width-sm;
+    left: $theme-menu-width;
     min-width: 100%;
   }
 }
 
-@include breakpoint(md) {
+@media (min-width: $topnav-breakpoint) {
   .menu-md {
     left: 0;
     width: $theme-menu-width;
@@ -79,6 +85,12 @@
 @include breakpoint(xl) {
   .sidebar-wrap,
   .addons-wrap {
+    left: calc(50% - #{$width-xl * 0.5});
+  }
+
+  // 側欄常駐時，殘留的 .shift（例如先前在窄視窗開過抽屜）不應再影響位置
+  .sidebar-wrap.shift,
+  .addons-wrap.shift {
     left: calc(50% - #{$width-xl * 0.5});
   }
 

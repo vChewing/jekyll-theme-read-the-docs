@@ -1,0 +1,147 @@
+// 頂置導航列：承載所有一級導航（根層頁面與一級分類）。
+// 側邊欄退居二級導航：只在當前區段內展開文章清單與頁內結構。
+// 窄螢幕（< lg）進入抽屜模式：一級連結收進漢堡選單、側邊欄改為離屏抽屜。
+
+.topnav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  // 與主版面同寬（$width-xl）並置中：不要滿版撐開
+  max-width: $width-xl;
+  margin: 0 auto;
+  height: $topnav-height;
+  color: $theme-white;
+  background: $theme-carmine;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+
+.topnav-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 100%;
+  max-width: $width-xl;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.topnav-logo {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  text-decoration: none;
+
+  img {
+    display: block;
+    width: auto;
+    height: auto;
+    // 最大寬度 180px，等比縮放（不可超過導航列高度）
+    max-width: 180px;
+    max-height: $topnav-height - 16px;
+  }
+}
+
+.topnav-links {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 6px;
+    // 不用半透明白：在胭脂底上對比不夠、字看起來發灰
+    color: $theme-white;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+
+    &:hover {
+      color: $theme-white;
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    &.active {
+      color: $theme-white;
+      background: rgba(255, 255, 255, 0.22);
+    }
+  }
+}
+
+.topnav-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.topnav-search {
+  input {
+    width: 200px;
+    border: 1px solid darken($theme-carmine, 5%);
+    border-radius: 50px;
+    font-size: 80%;
+  }
+}
+
+.topnav-icon-btn {
+  padding: 6px;
+  color: $theme-white;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.14);
+  }
+}
+
+// 漢堡鈕：預設隱藏，只在抽屜模式出現
+.topnav-menu-toggle {
+  display: none;
+}
+
+// 內容要讓開固定的導航列（側邊欄與 addons 的位移見 _layout.scss）
+body {
+  padding-top: $topnav-height;
+}
+
+// 抽屜模式：一級連結收進抽屜、漢堡鈕出現
+// 閾值 $topnav-breakpoint（960px）：低於此寬度時側欄改為抽屜
+@media (max-width: #{$topnav-breakpoint - 0.02px}) {
+  .topnav-links {
+    display: none;
+  }
+
+  .topnav-menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// 極窄：連搜尋框也收進抽屜（抽屜內另有搜尋框）
+@media (max-width: 560px) {
+  .topnav-search {
+    display: none;
+  }
+}
+
+// 抽屜專屬元素：僅在抽屜模式顯示
+.drawer-only {
+  display: none;
+}
+
+@media (max-width: #{$topnav-breakpoint - 0.02px}) {
+  .drawer-only {
+    display: block;
+  }
+}

@@ -1,23 +1,14 @@
 <div class="sidebar-wrap overflow-hidden">
     <div class="sidebar height-full overflow-y-scroll overflow-x-hidden">
         <div class="header d-flex flex-column p-3 text-center">
-            <button class="theme-toggle" type="button" title="Theme" aria-label="Theme">
-                <i class="fa fa-adjust"></i>
-            </button>
             <div class="title pb-1">
                 <a class="h4 no-underline py-1 px-2 rounded-1" href="{{ site.baseurl }}/" title="{{ site.description }}">
                     <i class="fa fa-home"></i> {{ site.title }}
                 </a>
             </div>
             <span class="version">{{ docs.latest_release.name }}</span>
-            <img
-                class="site-logo"
-                src="{{ site.baseurl }}/site_logo.png"
-                srcset="{{ site.baseurl }}/site_logo.png 1x, {{ site.baseurl }}/site_logo@2x.png 2x"
-                width="288"
-                height="98"
-                alt="{{ site.title }}">
-            <form class="search pt-2" action="{{ site.baseurl }}/search.html" method="get" autocomplete="off">
+            {%- comment -%} 抽屜模式專用搜尋框（寬螢幕時搜尋框在頂置導航列右端） {%- endcomment -%}
+            <form class="search pt-2 drawer-only" action="{{ site.baseurl }}/search.html" method="get" autocomplete="off">
                 <input class="form-control input-block input-sm" type="text" name="q" placeholder="{{ __.search_docs | default: 'Search docs...' }}">
             </form>
         </div>

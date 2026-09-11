@@ -1,4 +1,6 @@
-<link rel="stylesheet" href="{{ base }}/assets/css/theme{% if site.debug.dist != false %}.min{% endif %}.css">
+{%- comment -%} 資產版本號：GH Pages 上用建置 commit，本機預覽則用建置時間（每次重建都會換，避免瀏覽器拿舊檔） {%- endcomment -%}
+{%- assign asset_version = site.github.build_revision | default: site.time | date: "%s" -%}
+<link rel="stylesheet" href="{{ base }}/assets/css/theme{% if site.debug.dist != false %}.min{% endif %}.css?v={{ asset_version }}">
 
 {%- if extra_scss.size > 0 -%}
     <style>{{ extra_scss | scssify | strip_newlines }}</style>

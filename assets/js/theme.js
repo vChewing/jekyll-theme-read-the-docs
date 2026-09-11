@@ -110,44 +110,59 @@ function toggleCurrent(link) {
 }
 
 function toc() {
-  $(".toctree li.current")
-    .append('<ul class="content-toc"></ul>')
-    .html(function () {
-      let level = parseInt(this.dataset.level);
-      let temp = 0;
-      let stack = [$(this).find(".content-toc")];
+  // 側邊欄的當前條目（一般內頁）
+  const $currentLi = $(".toctree li.current");
+  let $list = null;
+  let level = 1;
 
-      $(".markdown-body")
-        .find("h2,h3,h4,h5,h6")
-        .each(function () {
-          let anchor = $("<a/>")
-            .addClass("d-flex flex-items-baseline")
-            .text($(this).text())
-            .attr("href", `#${this.id}`);
-          let tagLevel = parseInt(this.tagName.slice(1)) - 1;
+  if ($currentLi.length) {
+    $currentLi.append('<ul class="content-toc"></ul>');
+    $list = $currentLi.find(".content-toc").first();
+    level = parseInt($currentLi.get(0).dataset.level, 10) || 1;
+  } else {
+    // 分類首頁（例：/manual/）：側邊欄沒有該頁自身的條目（它的條目是 caption），
+    // 此時把本章節樹掛到該分類標題之下，否則整段章節結構會消失。
+    const $dir = $(".toctree details.toc-dir.current-section");
+    if (!$dir.length) return;
 
-          if (tagLevel > temp) {
-            let parent = stack[0].children("li:last")[0];
-            if (parent) {
-              stack.unshift($("<ul/>").appendTo(parent));
-            }
-          } else {
-            stack.splice(
-              0,
-              Math.min(temp - tagLevel, Math.max(stack.length - 1, 0)),
-            );
-          }
-          temp = tagLevel;
+    $list = $('<ul class="content-toc"></ul>').insertAfter($dir.children("summary"));
+    level = 2;
+  }
 
-          $("<li/>")
-            .addClass(`toc level-${level + tagLevel}`)
-            .append(anchor)
-            .appendTo(stack[0]);
-        });
-      if (!stack[0].html()) {
-        stack[0].remove();
+  let temp = 0;
+  let stack = [$list];
+
+  $(".markdown-body")
+    .find("h2,h3,h4,h5,h6")
+    .each(function () {
+      let anchor = $("<a/>")
+        .addClass("d-flex flex-items-baseline")
+        .text($(this).text())
+        .attr("href", `#${this.id}`);
+      let tagLevel = parseInt(this.tagName.slice(1)) - 1;
+
+      if (tagLevel > temp) {
+        let parent = stack[0].children("li:last")[0];
+        if (parent) {
+          stack.unshift($("<ul/>").appendTo(parent));
+        }
+      } else {
+        stack.splice(
+          0,
+          Math.min(temp - tagLevel, Math.max(stack.length - 1, 0)),
+        );
       }
+      temp = tagLevel;
+
+      $("<li/>")
+        .addClass(`toc level-${level + tagLevel}`)
+        .append(anchor)
+        .appendTo(stack[0]);
     });
+
+  if (!$list.children().length) {
+    $list.remove();
+  }
 }
 
 function set(name, value) {
