@@ -1,7 +1,9 @@
 <div class="content-wrap">
     <div class="content p-3 p-sm-5">
-        {% include templates/breadcrumbs.liquid %}
-        <hr>
+        {% unless page.hide_breadcrumbs %}
+            {% include templates/breadcrumbs.liquid %}
+            <hr>
+        {% endunless %}
         <div role="main" itemscope="itemscope" itemtype="https://schema.org/Article">
             <div class="markdown-body" itemprop="articleBody">
                 {{ content }}

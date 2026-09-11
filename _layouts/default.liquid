@@ -18,9 +18,10 @@ layout: tasks/compress
     {%- include common/script.liquid -%}
     {%- include extra/head.html -%}
   </head>
-  {%- comment -%} 依 front matter 決定側欄狀態：
+  {%- comment -%} 依 front matter 決定版面（側欄、內容頂欄）狀態：
        autohide_article_chapter_index — 不把本章節結構放進側欄；
-       若該頁本身沒有下級結構（根層頁面，如全站主頁）則側欄會變空 → 寬螢幕整條收掉（見 core/sidebar.scss）。 {%- endcomment -%}
+       若該頁本身沒有下級結構（根層頁面，如全站主頁）則側欄會變空 → 寬螢幕整條收掉（見 core/sidebar.scss）。
+       hide_breadcrumbs — 內容頂端的麵包屑列與其下分隔線整欄不渲染（見 templates/content.liquid）。 {%- endcomment -%}
   {%- assign layout_cur_page = site_pages | where: "url", page.url | first -%}
   {%- assign layout_cur_srcdir = layout_cur_page.path | remove: layout_cur_page.name | prepend: '/' -%}
   {%- assign sidebar_would_be_empty = false -%}
