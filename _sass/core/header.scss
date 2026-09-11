@@ -1,6 +1,7 @@
 .header {
   color: $theme-white;
-  background: $theme-carmine;
+  // 50% 透明度（與側欄底色疊出層次）
+  background: transparentize($theme-carmine, 0.5);
 
   input {
     border-radius: 50px;
