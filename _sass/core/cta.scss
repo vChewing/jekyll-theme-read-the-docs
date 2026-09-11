@@ -1,0 +1,32 @@
+// 大型 CTA 按鈕（橢圓、主題胭脂紅底）：用於「下載」等主要行動號召。
+//
+// 用法一（kramdown IAL）：[⬇️ 點此下載](./Downloads.md){: .cta-button}
+// 用法二（raw HTML）：<a class="cta-button" href="./Downloads.md">⬇️ 點此下載</a>
+// 選擇器加 .markdown-body a.cta-button 提高優先級；color 再用 !important 鎖死：
+// 深色模式的 `html:not([data-theme="light"]) .markdown-body a`（0,2,2）
+// 優先級高於本組選擇器，不用 !important 會被染成粉紅字。
+.cta-button,
+.markdown-body a.cta-button {
+  display: inline-block;
+  padding: 0.55em 1.8em;
+  color: #fff !important;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  background: $theme-carmine;
+  border-radius: 999px;
+  transition: background 0.15s ease;
+
+  &:visited {
+    color: #fff !important;
+  }
+
+  &:hover,
+  &:focus {
+    color: #fff !important;
+    text-decoration: none;
+    background: darken($theme-carmine, 8%);
+  }
+}
