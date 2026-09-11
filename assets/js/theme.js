@@ -368,6 +368,83 @@ function carousel() {
   });
 }
 
+function collapseH2Sections() {
+  // 頁面可用 front matter 的 autocollapse_h2_sections 把各 h2 標題以下的內容自動摺疊
+  if (!document.body.classList.contains("autocollapse-h2-sections")) return;
+
+  const $main = $(".markdown-body").first();
+  if (!$main.length) return;
+
+  // 把每個 h2 與下一個 h1/h2 之間的兄弟節點收進可摺疊的包裹層（僅動 DOM，不動已渲染的內容）
+  $main.find("h2").each(function (index) {
+    const $head = $(this);
+    const $section = $("<div>", {
+      class: "h2-collapse-body is-collapsed",
+      id: `h2-collapse-body-${index + 1}`,
+    });
+
+    let $node = $head.next();
+    while ($node.length && !$node.is("h1, h2")) {
+      const $next = $node.next();
+      $section.append($node);
+      $node = $next;
+    }
+
+    if (!$section.children().length) return; // 空章節無須摺疊
+
+    $head.after($section);
+    $head.addClass("h2-collapse-head").attr({
+      role: "button",
+      tabindex: "0",
+      "aria-expanded": "false",
+      "aria-controls": $section.attr("id"),
+    });
+  });
+
+  const toggleSection = function ($head) {
+    const $body = $head.next(".h2-collapse-body");
+    if (!$body.length) return;
+    const collapsed = $body.toggleClass("is-collapsed").hasClass("is-collapsed");
+    $head.attr("aria-expanded", (!collapsed).toString());
+  };
+
+  // 點擊標題切換摺疊狀態；點到標題內的錨點連結時維持原生跳轉
+  $(document).on("click", ".h2-collapse-head", function (event) {
+    if ($(event.target).closest("a").length) return;
+    toggleSection($(this));
+  });
+
+  // 鍵盤操作（Enter / Space）
+  $(document).on("keydown", ".h2-collapse-head", function (event) {
+    if (event.target !== this) return;
+    if (event.key !== "Enter" && event.key !== " " && event.key !== "Spacebar") return;
+    event.preventDefault();
+    toggleSection($(this));
+  });
+
+  // 以 #hash 跳進被摺疊的內容時，先展開目標所在的章節再捲動
+  const openHashTarget = function () {
+    let id = (location.hash || "").slice(1);
+    try {
+      id = decodeURIComponent(id);
+    } catch (e) {
+      // 保持原樣
+    }
+    if (!id) return;
+    const target = document.getElementById(id);
+    if (!target) return;
+    const $section = $(target).closest(".h2-collapse-body.is-collapsed");
+    if (!$section.length) return;
+    $section
+      .removeClass("is-collapsed")
+      .prev(".h2-collapse-head")
+      .attr("aria-expanded", "true");
+    if (target.scrollIntoView) target.scrollIntoView();
+  };
+  $(window).on("hashchange", openHashTarget);
+  openHashTarget();
+}
+
 function tocDirs() {
   const KEY = "toc-open-dirs";
   let saved = {};
@@ -481,6 +558,7 @@ highlight();
 theme();
 tocDirs();
 carousel();
+collapseH2Sections();
 
 /* nested ul */
 $(".toc ul")

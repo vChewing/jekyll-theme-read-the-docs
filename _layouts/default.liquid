@@ -21,14 +21,15 @@ layout: tasks/compress
   {%- comment -%} 依 front matter 決定版面（側欄、內容頂欄）狀態：
        autohide_article_chapter_index — 不把本章節結構放進側欄；
        若該頁本身沒有下級結構（根層頁面，如全站主頁）則側欄會變空 → 寬螢幕整條收掉（見 core/sidebar.scss）。
-       hide_breadcrumbs — 內容頂端的麵包屑列與其下分隔線整欄不渲染（見 templates/content.liquid）。 {%- endcomment -%}
+       hide_breadcrumbs — 內容頂端的麵包屑列與其下分隔線整欄不渲染（見 templates/content.liquid）。
+       autocollapse_h2_sections — 把正文內各 h2 標題以下的內容自動摺疊，點擊標題即可展開／收合（見 assets/js/theme.js 的 collapseH2Sections() 與 core/collapse.scss）。 {%- endcomment -%}
   {%- assign layout_cur_page = site_pages | where: "url", page.url | first -%}
   {%- assign layout_cur_srcdir = layout_cur_page.path | remove: layout_cur_page.name | prepend: '/' -%}
   {%- assign sidebar_would_be_empty = false -%}
   {%- if page.autohide_article_chapter_index and layout_cur_srcdir == "/" -%}
     {%- assign sidebar_would_be_empty = true -%}
   {%- endif -%}
-  <body class="container{% if page.autohide_article_chapter_index %} autohide-chapter-index{% endif %}{% if sidebar_would_be_empty %} sidebar-hidden{% endif %}">
+  <body class="container{% if page.autohide_article_chapter_index %} autohide-chapter-index{% endif %}{% if page.autocollapse_h2_sections %} autocollapse-h2-sections{% endif %}{% if sidebar_would_be_empty %} sidebar-hidden{% endif %}">
     {%- include templates/topnav.liquid -%}
     {%- include templates/sidebar.liquid -%}
     {%- include templates/content.liquid -%}

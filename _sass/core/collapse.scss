@@ -1,0 +1,43 @@
+// 正文的 h2 折疊（front matter: autocollapse_h2_sections: true）
+// 包裹層由 assets/js/theme.js 的 collapseH2Sections() 於執行時建立。
+
+.autocollapse-h2-sections {
+  .h2-collapse-head {
+    position: relative;
+    cursor: pointer;
+
+    // 摺疊指示箭頭：固定在標題最右緣，展開時轉正
+    &::after {
+      content: "▸";
+      position: absolute;
+      top: 50%;
+      right: 2px;
+      transform: translateY(-50%);
+      font-size: 0.7em;
+      opacity: 0.55;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    &:hover::after {
+      opacity: 1;
+    }
+
+    &[aria-expanded="true"]::after {
+      transform: translateY(-50%) rotate(90deg);
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $theme-link;
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+  }
+
+  .h2-collapse-body.is-collapsed {
+    display: none;
+  }
+}
